@@ -332,9 +332,9 @@ class MutationType extends ObjectType
                             /** @var $configuration Configuration */
                             $configuration = $context['configuration'];
                             
-                            $object = getObjectByPathOrId($args, $entity);
+                            $object = MutationType::getObjectByPathOrId($args, $entity);
 
-                            if(!$object == null){
+                            if(!$object){
                                 return [
                                     "success" => false,
                                     "message" => "unable to delete object. Unknown id or path"
@@ -396,7 +396,7 @@ class MutationType extends ObjectType
         }
     }
 
-    private function getObjectByPathOrId($args, $entity) {
+    private static function getObjectByPathOrId($args, $entity) {
         $className = 'Pimcore\\Model\\DataObject\\' . ucfirst($entity);
         $object = null;
 
@@ -427,7 +427,7 @@ class MutationType extends ObjectType
                 $configuration = $context['configuration'];
 
                 if (!$object) {
-                    $object = getObjectByPathOrId($args, $entity);
+                    $object = MutationType::getObjectByPathOrId($args, $entity);
                 }
 
                 if(!$object) {
