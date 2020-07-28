@@ -42,8 +42,13 @@ class ManyToManyObjectRelation extends Base
                     if (isset($newValueItemValue["type"]) && $newValueItemValue["type"] !== 'object') {
                         throw new ClientSafeException("expected object type");
                     }
-
-                    $element = \Pimcore\Model\Element\Service::getElementById('object', $newValueItemValue["id"]);
+                    
+                    if (isset($newValueItemValue["id"])) {
+                        $element = \Pimcore\Model\Element\Service::getElementById('object', $newValueItemValue["id"]);
+                    } else if (isset($newValueItemValue["path"])) {
+                        $element = \Pimcore\Model\Element\Service::getElementByPath('object', $newValueItemValue["path"]);
+                    }                    
+                    
                     if ($element) {
                         $result[] = $element;
                     }

@@ -43,11 +43,16 @@ class ManyToManyRelation extends Base
                         throw new ClientSafeException("type expected");
                     }
 
-                    if (!isset($newValueItemValue["id"])) {
-                        throw new ClientSafeException("ID expected");
+                    if (!isset($newValueItemValue["id"]) && !isset($newValueItemValue["path"])) {
+                        throw new ClientSafeException("Either ID or 'path' expected");
                     }
 
-                    $element = \Pimcore\Model\Element\Service::getElementById($newValueItemValue["type"], $newValueItemValue["id"]);
+                    if (isset($newValueItemValue["id"])) {
+                        $element = \Pimcore\Model\Element\Service::getElementById('object', $newValueItemValue["id"]);
+                    } else if (isset($newValueItemValue["path"])) {
+                        $element = \Pimcore\Model\Element\Service::getElementByPath('object', $newValueItemValue["path"]);
+                    }  
+
                     if ($element) {
                         $result[] = $element;
                     }

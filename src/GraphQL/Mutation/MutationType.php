@@ -298,7 +298,8 @@ class MutationType extends ObjectType
                     $updateField = [
                         'type' => $updateResultType,
                         'args' => [
-                            'id' => ['type' => Type::nonNull(Type::int())],
+                            'id' => ['type' => Type::int()],
+                            'path' => ['type' => Type::string()],
                             'defaultLanguage' => ['type' => Type::string()],
                             'omitMandatoryCheck' => ['type' => Type::boolean()],
                             'input' => ['type' => $inputType],
@@ -324,14 +325,21 @@ class MutationType extends ObjectType
                 $deleteField = [
                     'type' => $deleteResultType,
                     'args' => [
-                        'id' => ['type' => Type::nonNull(Type::int())],
+                        'id' => ['type' => Type::int()],
+                        'path' => ['type' => Type::string()],
                     ], 'resolve' => static function ($value, $args, $context, ResolveInfo $info) use ($entity, $modelFactory, $me) {
                         try {
-                            $id = $args["id"];
                             /** @var $configuration Configuration */
                             $configuration = $context['configuration'];
-                            $className = 'Pimcore\\Model\\DataObject\\' . ucfirst($entity);
-                            $object = $className::getById($id);
+                            
+                            $object = getObjectByPathOrId($args, $entity);
+
+                            if(!$object == null){
+                                return [
+                                    "success" => false,
+                                    "message" => "unable to delete object. Unknown id or path"
+                                ];
+                            }
 
                             if (!$me->omitPermissionCheck && !WorkspaceHelper::checkPermission($object, "delete") ) {
                                 return [
@@ -388,6 +396,19 @@ class MutationType extends ObjectType
         }
     }
 
+    private function getObjectByPathOrId($args, $entity) {
+        $className = 'Pimcore\\Model\\DataObject\\' . ucfirst($entity);
+        $object = null;
+
+        if(isset($args["id"])){
+            $object = $className::getById($args["id"]);
+        } else if(isset($args["path"])) {
+            $object = $className::getByPath($args["path"]);
+        }
+        return $object;
+    }
+
+
     /**
      * @param $entity
      * @param $modelFactory
@@ -406,9 +427,14 @@ class MutationType extends ObjectType
                 $configuration = $context['configuration'];
 
                 if (!$object) {
-                    $className = 'Pimcore\\Model\\DataObject\\' . ucfirst($entity);
-                    $id = $args["id"];
-                    $object = $className::getById($id);
+                    $object = getObjectByPathOrId($args, $entity);
+                }
+
+                if(!$object) {
+                    return [
+                        "success" => false,
+                        "message" => "unable to update object. Unknown id or path"
+                    ];
                 }
 
                 if (!$omitPermissionCheck && !WorkspaceHelper::checkPermission($object, "update")) {
