@@ -337,7 +337,7 @@ class MutationType extends ObjectType
                             if(!$object){
                                 return [
                                     "success" => false,
-                                    "message" => "unable to delete object. Unknown id or path"
+                                    "message" => "unable to delete object. Unknown id or fullpath"
                                 ];
                             }
 
@@ -433,7 +433,7 @@ class MutationType extends ObjectType
                 if(!$object) {
                     return [
                         "success" => false,
-                        "message" => "unable to update object. Unknown id or path"
+                        "message" => "unable to update object. Unknown id or fullpath"
                     ];
                 }
 

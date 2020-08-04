@@ -43,7 +43,7 @@ class ManyToManyRelation extends Base
                         throw new ClientSafeException("type expected");
                     }
 
-                    if (!isset($newValueItemValue["id"]) && !isset($newValueItemValue["path"])) {
+                    if (!isset($newValueItemValue["id"]) && !isset($newValueItemValue["fullpath"])) {
                         throw new ClientSafeException("Either ID or 'fullpath' expected");
                     }
 
