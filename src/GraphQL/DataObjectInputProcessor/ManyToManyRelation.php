@@ -44,13 +44,13 @@ class ManyToManyRelation extends Base
                     }
 
                     if (!isset($newValueItemValue["id"]) && !isset($newValueItemValue["path"])) {
-                        throw new ClientSafeException("Either ID or 'path' expected");
+                        throw new ClientSafeException("Either ID or 'fullpath' expected");
                     }
 
                     if (isset($newValueItemValue["id"])) {
                         $element = \Pimcore\Model\Element\Service::getElementById('object', $newValueItemValue["id"]);
-                    } else if (isset($newValueItemValue["path"])) {
-                        $element = \Pimcore\Model\Element\Service::getElementByPath('object', $newValueItemValue["path"]);
+                    } else if (isset($newValueItemValue["fullpath"])) {
+                        $element = \Pimcore\Model\Element\Service::getElementByPath('object', $newValueItemValue["fullpath"]);
                     }  
 
                     if ($element) {

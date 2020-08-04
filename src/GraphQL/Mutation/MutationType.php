@@ -299,7 +299,7 @@ class MutationType extends ObjectType
                         'type' => $updateResultType,
                         'args' => [
                             'id' => ['type' => Type::int()],
-                            'path' => ['type' => Type::string()],
+                            'fullpath' => ['type' => Type::string()],
                             'defaultLanguage' => ['type' => Type::string()],
                             'omitMandatoryCheck' => ['type' => Type::boolean()],
                             'input' => ['type' => $inputType],
@@ -326,7 +326,7 @@ class MutationType extends ObjectType
                     'type' => $deleteResultType,
                     'args' => [
                         'id' => ['type' => Type::int()],
-                        'path' => ['type' => Type::string()],
+                        'fullpath' => ['type' => Type::string()],
                     ], 'resolve' => static function ($value, $args, $context, ResolveInfo $info) use ($entity, $modelFactory, $me) {
                         try {
                             /** @var $configuration Configuration */
@@ -402,8 +402,8 @@ class MutationType extends ObjectType
 
         if(isset($args["id"])){
             $object = $className::getById($args["id"]);
-        } else if(isset($args["path"])) {
-            $object = $className::getByPath($args["path"]);
+        } else if(isset($args["fullpath"])) {
+            $object = $className::getByPath($args["fullpath"]);
         }
         return $object;
     }

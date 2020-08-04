@@ -45,8 +45,8 @@ class ManyToManyObjectRelation extends Base
                     
                     if (isset($newValueItemValue["id"])) {
                         $element = \Pimcore\Model\Element\Service::getElementById('object', $newValueItemValue["id"]);
-                    } else if (isset($newValueItemValue["path"])) {
-                        $element = \Pimcore\Model\Element\Service::getElementByPath('object', $newValueItemValue["path"]);
+                    } else if (isset($newValueItemValue["fullpath"])) {
+                        $element = \Pimcore\Model\Element\Service::getElementByPath('object', $newValueItemValue["fullpath"]);
                     }                    
                     
                     if ($element) {
